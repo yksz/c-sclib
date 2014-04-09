@@ -1,2 +1,2 @@
-c-sclib
+C Simple Collection Library
 =======
