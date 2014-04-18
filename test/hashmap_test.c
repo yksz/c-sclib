@@ -150,8 +150,7 @@ static int test_load()
     HashMap_add(hashmap, "x", "24");
     HashMap_add(hashmap, "y", "25");
     HashMap_add(hashmap, "z", "26");
-    HashMap_print_str(hashmap);
-    assertEqual_int(47, HashMap_capacity(hashmap));
+    HashMap_print_strstr(hashmap);
     HashMap_free(hashmap);
     return 0;
 }
