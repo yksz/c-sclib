@@ -1,24 +1,24 @@
-#include "sclib/queue.h"
+#include "container/queue.h"
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "sclib/list.h"
+#include "container/list.h"
 
 struct queue
 {
-    List* list;
     int capacity;
+    List* list;
 };
 
 Queue* Queue_new(int capacity)
 {
-    Queue* queue = (Queue*) calloc(1, sizeof(Queue));
+    Queue* queue = (Queue*) malloc(sizeof(Queue));
     if (queue == NULL) {
         fprintf(stderr, "ERROR: out of memory\n");
-        exit(EXIT_FAILURE);
+        return NULL;
     }
-    queue->list = List_new();
     queue->capacity = (capacity > 0) ? capacity : 0;
+    queue->list = List_new();
     return queue;
 }
 
@@ -44,7 +44,9 @@ bool Queue_enqueue(Queue* self, void* data)
             && List_size(self->list) >= self->capacity) {
         return false;
     }
-    List_pushBack(self->list, data);
+    if (List_pushBack(self->list, data) == NULL) {
+        return false;
+    }
     return true;
 }
 

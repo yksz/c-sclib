@@ -1,4 +1,4 @@
-#include "sclib/array.h"
+#include "container/array.h"
 
 #include <assert.h>
 #include <stdio.h>
@@ -6,36 +6,33 @@
 
 struct array
 {
-    void** elems;
     int size;
     int capacity;
+    void** table;
 };
 
-static const int default_capacity = 10;
+static const int DEFAULT_CAPACITY = 10;
 
 Array* Array_new(int capacity)
 {
-    Array* array = (Array*) calloc(1, sizeof(Array));
+    Array* array = (Array*) malloc(sizeof(Array));
     if (array == NULL) {
         fprintf(stderr, "ERROR: out of memory\n");
-        exit(EXIT_FAILURE);
-    }
-    if (capacity <= 0) {
-        capacity = default_capacity;
-    }
-    array->elems = (void**) calloc(capacity, sizeof(void*));
-    if (array->elems == NULL) {
-        fprintf(stderr, "ERROR: out of memory\n");
-        exit(EXIT_FAILURE);
+        return NULL;
     }
     array->size = 0;
-    array->capacity = capacity;
+    array->capacity = (capacity > 0) ? capacity : DEFAULT_CAPACITY;
+    array->table = (void**) malloc(sizeof(void*) * array->capacity);
+    if (array->table == NULL) {
+        fprintf(stderr, "ERROR: out of memory\n");
+        return NULL;
+    }
     return array;
 }
 
 void Array_free(Array* self)
 {
-    free(self->elems);
+    free(self->table);
     free(self);
 }
 
@@ -54,28 +51,31 @@ void* Array_get(Array* self, int index)
     if (index < 0 || index >= self->size) {
         return NULL;
     }
-    return self->elems[index];
+    return self->table[index];
 }
 
-static void array_resize(Array* self)
+static bool array_resize(Array* self)
 {
     self->capacity *= 2;
-    void** new_elems = (void**) realloc(self->elems, sizeof(void*) * self->capacity);
-    if (new_elems == NULL) {
+    void** newTable = (void**) realloc(self->table, sizeof(void*) * self->capacity);
+    if (newTable == NULL) {
         fprintf(stderr, "ERROR: out of memory\n");
-        free(self->elems);
-        exit(EXIT_FAILURE);
+        return false;
     }
-    self->elems = new_elems;
+    self->table = newTable;
+    return true;
 }
 
-void Array_append(Array* self, void* data)
+bool Array_append(Array* self, void* data)
 {
     if (self->size >= self->capacity) {
-        array_resize(self);
+        if (!array_resize(self)) {
+            return false;
+        }
     }
-    self->elems[self->size] = data;
+    self->table[self->size] = data;
     self->size++;
+    return true;
 }
 
 void* Array_remove(Array* self, int index)
@@ -84,18 +84,18 @@ void* Array_remove(Array* self, int index)
         return NULL;
     }
     self->size--;
-    void* data = self->elems[index];
+    void* data = self->table[index];
     for (int i = index; i < self->size; i++) {
-        self->elems[i] = self->elems[i + 1];
+        self->table[i] = self->table[i + 1];
     }
-    self->elems[self->size] = NULL;
+    self->table[self->size] = NULL;
     return data;
 }
 
 void Array_clear(Array* self)
 {
     for (int i = 0; i < self->size; i++) {
-        self->elems[i] = NULL;
+        self->table[i] = NULL;
     }
     self->size = 0;
 }

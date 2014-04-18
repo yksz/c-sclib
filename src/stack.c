@@ -1,24 +1,24 @@
-#include "sclib/stack.h"
+#include "container/stack.h"
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "sclib/list.h"
+#include "container/list.h"
 
 struct stack
 {
-    List* list;
     int capacity;
+    List* list;
 };
 
 Stack* Stack_new(int capacity)
 {
-    Stack* stack = (Stack*) calloc(1, sizeof(Stack));
+    Stack* stack = (Stack*) malloc(sizeof(Stack));
     if (stack == NULL) {
         fprintf(stderr, "ERROR: out of memory\n");
-        exit(EXIT_FAILURE);
+        return NULL;
     }
-    stack->list = List_new();
     stack->capacity = (capacity > 0) ? capacity : 0;
+    stack->list = List_new();
     return stack;
 }
 
@@ -44,7 +44,9 @@ bool Stack_push(Stack* self, void* data)
             && List_size(self->list) >= self->capacity) {
         return false;
     }
-    List_pushBack(self->list, data);
+    if (List_pushBack(self->list, data) == NULL) {
+        return false;
+    }
     return true;
 }
 

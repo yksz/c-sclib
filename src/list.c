@@ -1,4 +1,4 @@
-#include "sclib/list.h"
+#include "container/list.h"
 
 #include <assert.h>
 #include <stdio.h>
@@ -6,17 +6,30 @@
 
 struct list
 {
-    Node* first;
-    Node* last;
+    Element* first;
+    Element* last;
     int size;
 };
 
-List* List_new()
+static Element* element_new(void* data)
 {
-    List* list = (List*) calloc(1, sizeof(List));
+    Element* elem = (Element*) malloc(sizeof(Element));
+    if (elem == NULL) {
+        fprintf(stderr, "ERROR: out of memory\n");
+        return NULL;
+    }
+    elem->data = data;
+    elem->next = NULL;
+    elem->prev = NULL;
+    return elem;
+}
+
+List* List_new(void)
+{
+    List* list = (List*) malloc(sizeof(List));
     if (list == NULL) {
         fprintf(stderr, "ERROR: out of memory\n");
-        exit(EXIT_FAILURE);
+        return NULL;
     }
     list->first = NULL;
     list->last = NULL;
@@ -42,135 +55,134 @@ bool List_empty(List* self)
     return self->size == 0;
 }
 
-Node* List_first(List* self)
+Element* List_first(List* self)
 {
     return self->first;
 }
 
-Node* List_last(List* self)
+Element* List_last(List* self)
 {
     return self->last;
 }
 
-static Node* list_newNode(void* data)
+static void list_insertAfter(List* self, Element* elem, Element* at)
 {
-    Node* node = (Node*) calloc(1, sizeof(Node));
-    if (node == NULL) {
-        fprintf(stderr, "ERROR: out of memory\n");
-        exit(EXIT_FAILURE);
-    }
-    node->data = data;
-    node->next = NULL;
-    node->prev = NULL;
-    return node;
-}
-
-static void list_insertAfter(List* self, Node* node, Node* at)
-{
-    node->prev = at;
-    node->next = at->next;
+    elem->prev = at;
+    elem->next = at->next;
     if (at->next == NULL) {
-        self->last = node;
+        self->last = elem;
     } else {
-        at->next->prev = node;
+        at->next->prev = elem;
     }
-    at->next = node;
+    at->next = elem;
 }
 
-static void list_insertBefore(List* self, Node* node, Node* at)
+static void list_insertBefore(List* self, Element* elem, Element* at)
 {
-    node->prev = at->prev;
-    node->next = at;
+    elem->prev = at->prev;
+    elem->next = at;
     if (at->prev == NULL) {
-        self->first = node;
+        self->first = elem;
     } else {
-        at->prev->next = node;
+        at->prev->next = elem;
     }
-    at->prev = node;
+    at->prev = elem;
 }
 
-Node* List_insertAfter(List* self, void* data, Node* at)
+Element* List_insertAfter(List* self, void* data, Element* at)
 {
     assert(at);
 
-    Node* node = list_newNode(data);
-    list_insertAfter(self, node, at);
+    Element* elem = element_new(data);
+    if (elem == NULL) {
+        return NULL;
+    }
+    list_insertAfter(self, elem, at);
     self->size++;
-    return node;
+    return elem;
 }
 
-Node* List_insertBefore(List* self, void* data, Node* at)
+Element* List_insertBefore(List* self, void* data, Element* at)
 {
     assert(at);
 
-    Node* node = list_newNode(data);
-    list_insertBefore(self, node, at);
+    Element* elem = element_new(data);
+    if (elem == NULL) {
+        return NULL;
+    }
+    list_insertBefore(self, elem, at);
     self->size++;
-    return node;
+    return elem;
 }
 
-static void list_pushFront(List* self, Node* node)
+static void list_pushFront(List* self, Element* elem)
 {
     if (self->first == NULL) {
-        self->first = node;
-        self->last = node;
-        node->prev = NULL;
-        node->next = NULL;
+        self->first = elem;
+        self->last = elem;
+        elem->prev = NULL;
+        elem->next = NULL;
     } else {
-        list_insertBefore(self, node, self->first);
+        list_insertBefore(self, elem, self->first);
     }
 }
 
-static void list_pushBack(List* self, Node* node)
+static void list_pushBack(List* self, Element* elem)
 {
     if (self->last == NULL) {
-        list_pushFront(self, node);
+        list_pushFront(self, elem);
     } else {
-        list_insertAfter(self, node, self->last);
+        list_insertAfter(self, elem, self->last);
     }
 }
 
-Node* List_pushFront(List* self, void* data)
+Element* List_pushFront(List* self, void* data)
 {
-    Node* node = list_newNode(data);
-    list_pushFront(self, node);
+    Element* elem = element_new(data);
+    if (elem == NULL) {
+        return NULL;
+    }
+    list_pushFront(self, elem);
     self->size++;
-    return node;
+    return elem;
 }
 
-Node* List_pushBack(List* self, void* data)
+Element* List_pushBack(List* self, void* data)
 {
-    Node* node = list_newNode(data);
-    list_pushBack(self, node);
+    Element* elem = element_new(data);
+    if (elem == NULL) {
+        return NULL;
+    }
+    list_pushBack(self, elem);
     self->size++;
-    return node;
+    return elem;
 }
 
-void* List_remove(List* self, Node* node)
+void* List_remove(List* self, Element* elem)
 {
-    assert(node);
+    assert(elem);
 
-    if (node->prev == NULL) {
-        self->first = node->next;
+    if (elem->prev == NULL) {
+        self->first = elem->next;
     } else {
-        node->prev->next = node->next;
+        elem->prev->next = elem->next;
     }
-    if (node->next == NULL) {
-        self->last = node->prev;
+    if (elem->next == NULL) {
+        self->last = elem->prev;
     } else {
-        node->next->prev = node->prev;
+        elem->next->prev = elem->prev;
     }
-    void* data = node->data;
-    free(node);
+    void* data = elem->data;
+    free(elem);
     self->size--;
     return data;
 }
 
 void List_clear(List* self)
 {
-    Node* next;
-    for (Node* n = self->first; n; n = next) {
-        next = n->next;
-        List_remove(self, n);
+    Element* next;
+    for (Element* e = self->first; e; e = next) {
+        next = e->next;
+        List_remove(self, e);
     }
 }

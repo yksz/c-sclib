@@ -1,5 +1,5 @@
-#ifndef SCLIB_STACK_H
-#define SCLIB_STACK_H
+#ifndef CONTAINER_STACK_H
+#define CONTAINER_STACK_H
 
 #include <stdbool.h>
 
@@ -13,4 +13,4 @@ bool   Stack_push  (Stack* self, void* data);
 void*  Stack_pop   (Stack* self);
 void*  Stack_top   (Stack* self);
 
-#endif /* SCLIB_STACK_H */
+#endif /* CONTAINER_STACK_H */
