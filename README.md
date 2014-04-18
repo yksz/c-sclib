@@ -1,2 +1,2 @@
-C Simple Collection Library
+C - Simple Container Library
 =======
