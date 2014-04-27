@@ -221,16 +221,23 @@ void HashMap_clear(HashMap* self)
     self->size = 0;
 }
 
-Array* HashMap_keys(HashMap* self)
+void** HashMap_keys(HashMap* self)
 {
-    Array* keys = Array_new(self->size);
+    void** keys = (void**) malloc(sizeof(void*) * (self->size + 1));
+    if (keys == NULL) {
+        fprintf(stderr, "ERROR: out of memory\n");
+        return NULL;
+    }
+    keys[self->size + 1] = NULL;
+    int count = 0;
     for (int i = 0; i < self->capacity; i++) {
         Entry* e = self->table[i];
         if (e == NULL) {
             continue;
         }
         for (; e; e = e->next) {
-            Array_append(keys, e->key);
+            keys[count] = e->key;
+            count++;
         }
     }
     return keys;

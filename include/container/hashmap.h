@@ -20,7 +20,7 @@ void*    HashMap_get     (HashMap* self, void* key);
 void*    HashMap_add     (HashMap* self, void* key, void* value);
 void*    HashMap_remove  (HashMap* self, void* key);
 void     HashMap_clear   (HashMap* self);
-Array*   HashMap_keys    (HashMap* self);
+void**   HashMap_keys    (HashMap* self);
 
 // --- for debug
 

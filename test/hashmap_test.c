@@ -1,6 +1,7 @@
 #include "container/hashmap.h"
 #include "minunit.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 static int test_size()
@@ -100,9 +101,12 @@ static int test_keys()
     HashMap_add(hashmap, "a", "1");
     HashMap_add(hashmap, "b", "2");
     HashMap_add(hashmap, "c", "3");
-    Array* keys = HashMap_keys(hashmap);
-    assertEqual_int(3, Array_size(keys));
-    Array_free(keys);
+    void** keys = HashMap_keys(hashmap);
+    int size = 0;
+    for (int i = 0; keys[i] != NULL; i++)
+        size++;
+    assertEqual_int(3, size);
+    free(keys);
     HashMap_free(hashmap);
     return 0;
 }
