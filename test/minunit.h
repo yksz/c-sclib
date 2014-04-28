@@ -7,8 +7,8 @@
 #define ASSERT_MESSAGE_SIZE 1024
 
 static char message[ASSERT_MESSAGE_SIZE];
-static int testsRun = 0;
-static int testsFailure = 0;
+static int runs = 0;
+static int failures = 0;
 
 #define fail() do { \
     snprintf(message, ASSERT_MESSAGE_SIZE, \
@@ -55,16 +55,16 @@ static int testsFailure = 0;
 
 #define runTest(test) do { \
     int result = test(); \
-    testsRun++; \
-    testsFailure += result; \
-    printf("%s: %s ... %s\n", __FILE__, #test, result==0 ? "PASSED" : "FAILED"); \
+    runs++; \
+    failures += result; \
+    printf("\t%s ... %s\n", #test, result == 0 ? "PASSED" : "FAILED"); \
     if (result != 0) { \
-        printf("\t%s\n", message); \
+        printf("\t\t%s\n", message); \
     } \
 } while (0)
 
 #define reportTestResult() do { \
-    printf("\n%d tests, %d failures\n\n", testsRun, testsFailure); \
+    printf("\n%d tests, %d failures\n\n", runs, failures); \
 } while(0)
 
 #endif /* MINUNIT_H */
