@@ -1,19 +1,49 @@
+STATIC_LIB = libsclib.a
+DYNAMIC_LIB = libsclib.so
+
 SRC_DIR = src
-INCLUDE_DIR = ./include
+OBJ_DIR = obj
+BIN_DIR = bin
+TEST_DIR = test
+INCLUDE_DIR = include
 
 SRCS := $(wildcard $(SRC_DIR)/*.c)
-OBJS = $(subst .c,.o,$(SRCS))
+OBJS := $(addprefix $(OBJ_DIR)/,$(notdir $(SRCS:.c=.o)))
+
+TEST_SRCS := $(wildcard $(TEST_DIR)/*.c)
+TEST_OBJS := $(subst .c,.o,$(TEST_SRCS))
+TEST_EXES := $(subst .c,.exe,$(TEST_SRCS))
 
 CC = gcc
-INCLUDES = -I$(INCLUDE_DIR)
+INCLUDES = -I $(INCLUDE_DIR)
 CFLAGS = -g -Wall -std=c99 $(INCLUDES)
 
-all: compile
+all: $(BIN_DIR)/$(STATIC_LIB) $(BIN_DIR)/$(DYNAMIC_LIB)
+
+alltest: $(TEST_EXES)
+		for exe in $(TEST_EXES); \
+		do $$exe; \
+		done
+
+$(BIN_DIR)/$(STATIC_LIB): $(OBJS)
+		$(AR) r $@ $^
+
+$(BIN_DIR)/$(DYNAMIC_LIB):
+		$(CC) -shared $(CFLAGS) -o $@ $(SRCS)
 
 compile: $(OBJS)
 
-$(SRC_DIR)/%.o: $(SRC_DIR)/%.c
+$(TEST_DIR)/%_test.exe: $(TEST_DIR)/%_test.o $(OBJS)
+		$(CC) -o $@ $^
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+		$(CC) -c $(CFLAGS) -o $@ $<
+
+$(TEST_DIR)/%_test.o: $(TEST_DIR)/%_test.c
 		$(CC) -c $(CFLAGS) -o $@ $<
 
 clean:
-		rm $(OBJS)
+		rm $(STATIC_LIB) $(DYNAMIC_LIB) $(OBJS)
+
+cleantest:
+		rm $(TEST_EXES)

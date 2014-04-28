@@ -57,14 +57,14 @@ static int testsFailure = 0;
     int result = test(); \
     testsRun++; \
     testsFailure += result; \
-    printf("%s ... %s\n", #test, result==0 ? "PASSED" : "FAILED"); \
+    printf("%s: %s ... %s\n", __FILE__, #test, result==0 ? "PASSED" : "FAILED"); \
     if (result != 0) { \
         printf("\t%s\n", message); \
     } \
 } while (0)
 
 #define reportTestResult() do { \
-    printf("\n%d tests, %d failures\n", testsRun, testsFailure); \
+    printf("\n%d tests, %d failures\n\n", testsRun, testsFailure); \
 } while(0)
 
 #endif /* MINUNIT_H */
