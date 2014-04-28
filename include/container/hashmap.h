@@ -3,7 +3,6 @@
 
 #include <stdbool.h>
 #include <stdint.h>
-#include "array.h"
 
 typedef struct hashmap HashMap;
 

@@ -228,7 +228,7 @@ void** HashMap_keys(HashMap* self)
         fprintf(stderr, "ERROR: out of memory\n");
         return NULL;
     }
-    keys[self->size + 1] = NULL;
+    keys[self->size] = NULL;
     int count = 0;
     for (int i = 0; i < self->capacity; i++) {
         Entry* e = self->table[i];
