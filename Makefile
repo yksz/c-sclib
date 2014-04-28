@@ -18,23 +18,24 @@ CC = gcc
 INCLUDES = -I $(INCLUDE_DIR)
 CFLAGS = -g -Wall -std=c99 $(INCLUDES)
 
-all: $(BIN_DIR)/$(STATIC_LIB) $(BIN_DIR)/$(DYNAMIC_LIB)
+all: $(STATIC_LIB) $(DYNAMIC_LIB)
 
 alltest: $(TEST_EXES)
 		for exe in $(TEST_EXES); \
 		do $$exe; \
 		done
 
-$(BIN_DIR)/$(STATIC_LIB): $(OBJS)
-		$(AR) r $@ $^
+$(STATIC_LIB): $(OBJS)
+		$(AR) r $(BIN_DIR)/$@ $^
 
-$(BIN_DIR)/$(DYNAMIC_LIB):
-		$(CC) -shared $(CFLAGS) -o $@ $(SRCS)
+$(DYNAMIC_LIB):
+		$(CC) -shared $(CFLAGS) -o $(BIN_DIR)/$@ $(SRCS)
 
 compile: $(OBJS)
 
-$(TEST_DIR)/%_test.exe: $(TEST_DIR)/%_test.o $(OBJS)
-		$(CC) -o $@ $^
+%_test: $(TEST_DIR)/%_test.o $(OBJS)
+		$(CC) -o $(TEST_DIR)/$@.exe $^
+		$(TEST_DIR)/$@.exe
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 		$(CC) -c $(CFLAGS) -o $@ $<
