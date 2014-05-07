@@ -15,8 +15,7 @@ TEST_OBJS := $(subst .c,.o,$(TEST_SRCS))
 TEST_EXES := $(subst .c,.exe,$(TEST_SRCS))
 
 CC = gcc
-INCLUDES = -I $(INCLUDE_DIR)
-CFLAGS = -g -Wall -std=c99 $(INCLUDES)
+CFLAGS = -g -Wall -std=c99 -I$(INCLUDE_DIR)
 
 all: $(STATIC_LIB) $(DYNAMIC_LIB)
 
