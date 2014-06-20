@@ -118,16 +118,12 @@ static void hashmap_rehash(HashMap* self, Entry** newTable, int newCapacity)
         newTable[i] = NULL;
     }
     for (int i = 0; i < self->capacity; i++) {
-        Entry* e = self->table[i];
-        if (e == NULL) {
-            continue;
-        }
         Entry* next;
-        for (; e; e = next) {
+        for (Entry* e = self->table[i]; e; e = next) {
             next = e->next;
             int index = hashmap_index(self, e->key, newCapacity);
+            e->next = newTable[index];
             newTable[index] = e;
-            e->next = NULL;
         }
     }
     free(self->table);
