@@ -32,9 +32,11 @@ $(DYNAMIC_LIB):
 
 compile: $(OBJS)
 
-%_test: $(TEST_DIR)/%_test.o $(OBJS)
-		$(CC) -o $(TEST_DIR)/$@.exe $^
+%_test: $(TEST_DIR)/%_test.exe
 		$(TEST_DIR)/$@.exe
+
+$(TEST_DIR)/%_test.exe: $(TEST_DIR)/%_test.o $(OBJS)
+		$(CC) -o $@ $^
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 		$(CC) -c $(CFLAGS) -o $@ $<
@@ -43,7 +45,7 @@ $(TEST_DIR)/%_test.o: $(TEST_DIR)/%_test.c
 		$(CC) -c $(CFLAGS) -o $@ $<
 
 clean:
-		rm $(STATIC_LIB) $(DYNAMIC_LIB) $(OBJS)
+		rm $(BIN_DIR)/$(STATIC_LIB) $(BIN_DIR)/$(DYNAMIC_LIB) $(OBJS)
 
 cleantest:
 		rm $(TEST_EXES)
