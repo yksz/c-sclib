@@ -64,7 +64,7 @@ static int failures = 0;
 } while (0)
 
 #define reportTestResult() do { \
-    printf("\n%d tests, %d failures\n\n", runs, failures); \
+    printf("\n%s, %d tests, %d failures\n\n", __FILE__, runs, failures); \
 } while(0)
 
 #endif /* MINUNIT_H */
