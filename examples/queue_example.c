@@ -7,7 +7,7 @@ int main()
     Queue_enqueue(queue, "first");
     Queue_enqueue(queue, "second");
     Queue_enqueue(queue, "third");
-    while (!Queue_empty) {
+    while (!Queue_empty(queue)) {
         printf("data: %s\n", (char*) Queue_dequeue(queue));
     }
     Queue_free(queue);
