@@ -22,38 +22,38 @@ CFLAGS = -g -Wall -std=c99 -I$(INCLUDE_DIR)
 all: $(STATIC_LIB) $(DYNAMIC_LIB)
 
 alltest: $(TEST_EXES)
-		for exe in $(TEST_EXES); \
-		do $$exe; \
-		done
+	for exe in $(TEST_EXES); do \
+		$$exe; \
+	done
 
 $(STATIC_LIB): $(OBJS)
-		$(AR) r $(BIN_DIR)/$@ $^
+	$(AR) r $(BIN_DIR)/$@ $^
 
 $(DYNAMIC_LIB):
-		$(CC) -shared $(CFLAGS) -o $(BIN_DIR)/$@ $(SRCS)
+	$(CC) -shared $(CFLAGS) -o $(BIN_DIR)/$@ $(SRCS)
 
 compile: $(OBJS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-		$(CC) -c $(CFLAGS) -o $@ $<
+	$(CC) -c $(CFLAGS) -o $@ $<
 
 %_test: $(TEST_DIR)/%_test.exe
-		$(TEST_DIR)/$@.exe
+	$(TEST_DIR)/$@.exe
 
 $(TEST_DIR)/%_test.exe: $(TEST_DIR)/%_test.o $(OBJS)
-		$(CC) -o $@ $^
+	$(CC) -o $@ $^
 
 $(TEST_DIR)/%_test.o: $(TEST_DIR)/%_test.c
-		$(CC) -c $(CFLAGS) -o $@ $<
+	$(CC) -c $(CFLAGS) -o $@ $<
 
 %_example: $(EXAMPLES_DIR)/%_example.exe
-		$(EXAMPLES_DIR)/$@.exe
+	$(EXAMPLES_DIR)/$@.exe
 
 $(EXAMPLES_DIR)/%_example.exe: $(EXAMPLES_DIR)/%_example.c $(STATIC_LIB)
-		$(CC) $(CFLAGS) -o $@ $< $(BIN_DIR)/$(STATIC_LIB)
+	$(CC) $(CFLAGS) -o $@ $< $(BIN_DIR)/$(STATIC_LIB)
 
 clean:
-		rm $(BIN_DIR)/$(STATIC_LIB) $(BIN_DIR)/$(DYNAMIC_LIB) $(OBJS)
+	rm $(BIN_DIR)/$(STATIC_LIB) $(BIN_DIR)/$(DYNAMIC_LIB) $(OBJS)
 
 cleantest:
-		rm $(TEST_EXES)
+	rm $(TEST_EXES)
