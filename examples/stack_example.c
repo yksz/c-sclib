@@ -1,4 +1,4 @@
-#include "container/stack.h"
+#include "sclib/stack.h"
 #include <stdio.h>
 
 int main()

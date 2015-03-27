@@ -1,5 +1,5 @@
-#ifndef CONTAINER_HASHMAP_H
-#define CONTAINER_HASHMAP_H
+#ifndef SCLIB_HASHMAP_H
+#define SCLIB_HASHMAP_H
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -25,4 +25,4 @@ void**   HashMap_keys    (HashMap* self);
 
 void HashMap_print_strstr (HashMap* self);
 
-#endif /* CONTAINER_HASHMAP_H */
+#endif /* SCLIB_HASHMAP_H */

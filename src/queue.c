@@ -1,8 +1,8 @@
-#include "container/queue.h"
+#include "sclib/queue.h"
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "container/list.h"
+#include "sclib/list.h"
 
 struct queue
 {

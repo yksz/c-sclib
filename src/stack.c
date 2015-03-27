@@ -1,8 +1,8 @@
-#include "container/stack.h"
+#include "sclib/stack.h"
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "container/list.h"
+#include "sclib/list.h"
 
 struct stack
 {

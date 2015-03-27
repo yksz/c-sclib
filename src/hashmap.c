@@ -1,4 +1,4 @@
-#include "container/hashmap.h"
+#include "sclib/hashmap.h"
 
 #include <assert.h>
 #include <stdio.h>

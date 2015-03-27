@@ -1,5 +1,5 @@
-#ifndef CONTAINER_ARRAY_H
-#define CONTAINER_ARRAY_H
+#ifndef SCLIB_ARRAY_H
+#define SCLIB_ARRAY_H
 
 #include <stdbool.h>
 
@@ -14,4 +14,4 @@ bool   Array_append (Array* self, void* data);
 void*  Array_remove (Array* self, int index);
 void   Array_clear  (Array* self);
 
-#endif /* CONTAINER_ARRAY_H */
+#endif /* SCLIB_ARRAY_H */

@@ -1,4 +1,4 @@
-#include "container/array.h"
+#include "sclib/array.h"
 #include "minunit.h"
 #include <stdio.h>
 

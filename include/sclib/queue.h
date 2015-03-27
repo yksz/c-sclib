@@ -1,5 +1,5 @@
-#ifndef CONTAINER_QUEUE_H
-#define CONTAINER_QUEUE_H
+#ifndef SCLIB_QUEUE_H
+#define SCLIB_QUEUE_H
 
 #include <stdbool.h>
 
@@ -14,4 +14,4 @@ void*  Queue_dequeue (Queue* self);
 void*  Queue_front   (Queue* self);
 void*  Queue_back    (Queue* self);
 
-#endif /* CONTAINER_QUEUE_H */
+#endif /* SCLIB_QUEUE_H */

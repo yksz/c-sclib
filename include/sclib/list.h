@@ -1,5 +1,5 @@
-#ifndef CONTAINER_LIST_H
-#define CONTAINER_LIST_H
+#ifndef SCLIB_LIST_H
+#define SCLIB_LIST_H
 
 #include <stdbool.h>
 
@@ -26,4 +26,4 @@ Element* List_pushBack     (List* self, void* data);
 void*    List_remove       (List* self, Element* elem);
 void     List_clear        (List* self);
 
-#endif /* CONTAINER_LIST_H */
+#endif /* SCLIB_LIST_H */
