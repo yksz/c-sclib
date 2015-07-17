@@ -28,8 +28,8 @@ static uint32_t hashmap_hash_int  (void* key);
 static bool     hashmap_equal_str (void* key1, void* key2);
 static bool     hashmap_equal_int (void* key1, void* key2);
 
-static const int DEFAULT_CAPACITY = 11;
-static const float LOAD_FACTOR = 0.75;
+static const int kDefaultCapacity = 11;
+static const float kLoadFactor = 0.75;
 
 static void* entry_new(void* key, void* val, Entry* next)
 {
@@ -54,7 +54,7 @@ HashMap* HashMap_new(HashMap_HashFunc hash, HashMap_EqualFunc equal)
     hashmap->hash = hash;
     hashmap->equal = equal;
     hashmap->size = 0;
-    hashmap->capacity = DEFAULT_CAPACITY;
+    hashmap->capacity = kDefaultCapacity;
     hashmap->table = (Entry**) malloc(sizeof(Entry*) * hashmap->capacity);
     if (hashmap->table == NULL) {
         fprintf(stderr, "ERROR: out of memory\n");
@@ -63,7 +63,7 @@ HashMap* HashMap_new(HashMap_HashFunc hash, HashMap_EqualFunc equal)
     for (int i = 0; i < hashmap->capacity; i++) {
         hashmap->table[i] = NULL;
     }
-    hashmap->threshold = hashmap->capacity * LOAD_FACTOR;
+    hashmap->threshold = hashmap->capacity * kLoadFactor;
     return hashmap;
 }
 
@@ -140,7 +140,7 @@ static bool hashmap_resize(HashMap* self)
         return false;
     }
     hashmap_rehash(self, newTable, newCapacity);
-    self->threshold = newCapacity * LOAD_FACTOR;
+    self->threshold = newCapacity * kLoadFactor;
     return true;
 }
 

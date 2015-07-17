@@ -2,7 +2,7 @@
 #include "minunit.h"
 #include <stdio.h>
 
-#define Len_(array) (sizeof(array)/sizeof(array[0]))
+#define LEN(array) (sizeof(array)/sizeof(array[0]))
 
 static int test_new()
 {
@@ -66,7 +66,7 @@ static int test_pushBack()
 {
     char* strs[] = {"first", "second", "third"};
     List* list = List_new();
-    for (int i = 0; i < Len_(strs); i++) {
+    for (int i = 0; i < LEN(strs); i++) {
         List_pushBack(list, strs[i]);
     }
     int i = 0;

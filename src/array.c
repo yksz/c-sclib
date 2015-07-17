@@ -11,7 +11,7 @@ struct array
     void** table;
 };
 
-static const int DEFAULT_CAPACITY = 10;
+static const int kDefaultCapacity = 10;
 
 Array* Array_new(int capacity)
 {
@@ -21,7 +21,7 @@ Array* Array_new(int capacity)
         return NULL;
     }
     array->size = 0;
-    array->capacity = (capacity > 0) ? capacity : DEFAULT_CAPACITY;
+    array->capacity = (capacity > 0) ? capacity : kDefaultCapacity;
     array->table = (void**) malloc(sizeof(void*) * array->capacity);
     if (array->table == NULL) {
         fprintf(stderr, "ERROR: out of memory\n");
