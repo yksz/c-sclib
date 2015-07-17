@@ -1,5 +1,5 @@
-#include "sclib/list.h"
 #include <stdio.h>
+#include "sclib/list.h"
 
 int main()
 {

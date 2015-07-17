@@ -1,5 +1,5 @@
-#include "sclib/queue.h"
 #include <stdio.h>
+#include "sclib/queue.h"
 
 int main()
 {

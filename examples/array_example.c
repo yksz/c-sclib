@@ -1,5 +1,5 @@
-#include "sclib/array.h"
 #include <stdio.h>
+#include "sclib/array.h"
 
 int main()
 {

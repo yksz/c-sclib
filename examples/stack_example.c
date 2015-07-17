@@ -1,5 +1,5 @@
-#include "sclib/stack.h"
 #include <stdio.h>
+#include "sclib/stack.h"
 
 int main()
 {
@@ -13,4 +13,3 @@ int main()
     Stack_free(stack);
     return 0;
 }
-

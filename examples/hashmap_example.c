@@ -1,6 +1,6 @@
-#include "sclib/hashmap.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "sclib/hashmap.h"
 
 int main()
 {
