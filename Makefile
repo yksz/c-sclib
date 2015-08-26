@@ -1,13 +1,19 @@
 LIB_NAME = sclib
-STATIC_LIB = lib$(LIB_NAME).a
-DYNAMIC_LIB = lib$(LIB_NAME).so
+STATIC_LIB_NAME = lib$(LIB_NAME).a
+DYNAMIC_LIB_NAME = lib$(LIB_NAME).so
 
 ifeq ($(DEBUG),true)
   DST_DIR = build/debug
   CFLAGS += -g3 -O0
+  CFLAGS += -fprofile-arcs -ftest-coverage
+  LDFLAGS += -fprofile-arcs
 else
   DST_DIR = build/release
 endif
+
+BIN_DIR = $(DST_DIR)/bin
+STATIC_LIB = $(BIN_DIR)/$(STATIC_LIB_NAME)
+DYNAMIC_LIB = $(BIN_DIR)/$(DYNAMIC_LIB_NAME)
 
 SRC_DIR = src
 TEST_SRC_DIR = test
@@ -15,7 +21,6 @@ EXAMPLE_SRC_DIR = example
 INCLUDE_DIR = include
 
 OBJ_DIR = $(DST_DIR)/$(SRC_DIR)
-BIN_DIR = $(DST_DIR)/bin
 TEST_OBJ_DIR = $(DST_DIR)/$(TEST_SRC_DIR)
 EXAMPLE_OBJ_DIR = $(DST_DIR)/$(EXAMPLE_SRC_DIR)
 
@@ -32,11 +37,11 @@ all: $(STATIC_LIB) $(DYNAMIC_LIB)
 
 $(STATIC_LIB): $(OBJS)
 	@mkdir -p $(BIN_DIR)
-	$(AR) r $(BIN_DIR)/$@ $^
+	$(AR) r $@ $^
 
-$(DYNAMIC_LIB):
+$(DYNAMIC_LIB): $(OBJS)
 	@mkdir -p $(BIN_DIR)
-	$(CC) -shared $(CFLAGS) -o $(BIN_DIR)/$@ $(SRCS)
+	$(CC) -shared $(CFLAGS) -o $@ $(OBJS)
 
 compile: $(OBJS)
 
@@ -51,18 +56,23 @@ test: $(TEST_EXES)
 	$<
 
 $(TEST_OBJ_DIR)/%_test.exe: $(TEST_OBJ_DIR)/%_test.o $(OBJS)
-	$(CC) -o $@ $^
+	$(CC) -o $@ $(LDFLAGS) $^
 
 $(TEST_OBJ_DIR)/%_test.o: $(TEST_SRC_DIR)/%_test.c
 	@mkdir -p $(TEST_OBJ_DIR)
 	$(CC) -c $(CFLAGS) -o $@ $<
 
+.PRECIOUS: $(EXAMPLE_OBJ_DIR)/%_example.exe
+
 %_example: $(EXAMPLE_OBJ_DIR)/%_example.exe
 	$<
 
-$(EXAMPLE_OBJ_DIR)/%_example.exe: $(EXAMPLE_SRC_DIR)/%_example.c $(STATIC_LIB)
+$(EXAMPLE_OBJ_DIR)/%_example.exe: $(EXAMPLE_OBJ_DIR)/%_example.o $(STATIC_LIB)
+	$(CC) -o $@ $(LDFLAGS) $^
+
+$(EXAMPLE_OBJ_DIR)/%_example.o: $(EXAMPLE_SRC_DIR)/%_example.c
 	@mkdir -p $(EXAMPLE_OBJ_DIR)
-	$(CC) $(CFLAGS) -o $@ $< $(BIN_DIR)/$(STATIC_LIB)
+	$(CC) -c $(CFLAGS) -o $@ $<
 
 clean:
 	rm -rf $(DST_DIR)
