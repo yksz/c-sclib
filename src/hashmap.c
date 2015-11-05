@@ -79,6 +79,11 @@ HashMap* HashMap_new_int(void)
 
 void HashMap_free(HashMap* self)
 {
+    if (self == NULL) {
+        assert(false && "self must not be null");
+        return;
+    }
+
     HashMap_clear(self);
     free(self->table);
     free(self);
@@ -86,11 +91,21 @@ void HashMap_free(HashMap* self)
 
 int HashMap_size(HashMap* self)
 {
+    if (self == NULL) {
+        assert(false && "self must not be null");
+        return 0;
+    }
+
     return self->size;
 }
 
 bool HashMap_empty(HashMap* self)
 {
+    if (self == NULL) {
+        assert(false && "self must not be null");
+        return false;
+    }
+
     return self->size == 0;
 }
 
@@ -101,7 +116,14 @@ static int hashmap_index(HashMap* self, void* key, int capacity)
 
 void* HashMap_get(HashMap* self, void* key)
 {
-    assert(key);
+    if (self == NULL) {
+        assert(false && "self must not be null");
+        return NULL;
+    }
+    if (key == NULL) {
+        assert(false && "key must not be null");
+        return NULL;
+    }
 
     int index = hashmap_index(self, key, self->capacity);
     for (Entry* e = self->table[index]; e; e = e->next) {
@@ -146,7 +168,14 @@ static bool hashmap_resize(HashMap* self)
 
 void* HashMap_add(HashMap* self, void* key, void* val)
 {
-    assert(key);
+    if (self == NULL) {
+        assert(false && "self must not be null");
+        return NULL;
+    }
+    if (key == NULL) {
+        assert(false && "key must not be null");
+        return NULL;
+    }
 
     int index = hashmap_index(self, key, self->capacity);
     // overwrite
@@ -175,7 +204,14 @@ void* HashMap_add(HashMap* self, void* key, void* val)
 
 void* HashMap_remove(HashMap* self, void* key)
 {
-    assert(key);
+    if (self == NULL) {
+        assert(false && "self must not be null");
+        return NULL;
+    }
+    if (key == NULL) {
+        assert(false && "key must not be null");
+        return NULL;
+    }
 
     int index = hashmap_index(self, key, self->capacity);
     Entry* e = self->table[index];
@@ -202,6 +238,11 @@ void* HashMap_remove(HashMap* self, void* key)
 
 void HashMap_clear(HashMap* self)
 {
+    if (self == NULL) {
+        assert(false && "self must not be null");
+        return;
+    }
+
     for (int i = 0; i < self->capacity; i++) {
         Entry* e = self->table[i];
         if (e == NULL) {
@@ -219,6 +260,11 @@ void HashMap_clear(HashMap* self)
 
 void** HashMap_keys(HashMap* self)
 {
+    if (self == NULL) {
+        assert(false && "self must not be null");
+        return NULL;
+    }
+
     void** keys = (void**) malloc(sizeof(void*) * (self->size + 1));
     if (keys == NULL) {
         fprintf(stderr, "ERROR: out of memory\n");
@@ -266,7 +312,10 @@ static bool hashmap_equal_int(void* key1, void* key2)
     return *((int*) key1) == *((int*) key2);
 }
 
-// --- for debug
+
+//
+// For debug
+//
 
 static void hashmap_print(HashMap* self, void (*printFunc)(Entry*))
 {

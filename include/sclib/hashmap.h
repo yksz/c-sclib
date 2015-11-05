@@ -21,8 +21,7 @@ void*    HashMap_remove  (HashMap* self, void* key);
 void     HashMap_clear   (HashMap* self);
 void**   HashMap_keys    (HashMap* self);
 
-// --- for debug
-
+// For debug
 void HashMap_print_strstr (HashMap* self);
 
 #endif /* SCLIB_HASHMAP_H */

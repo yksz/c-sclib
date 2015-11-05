@@ -39,6 +39,11 @@ List* List_new(void)
 
 void List_free(List* self)
 {
+    if (self == NULL) {
+        assert(false && "self must not be null");
+        return;
+    }
+
     if (self->size > 0) {
         List_clear(self);
     }
@@ -47,21 +52,41 @@ void List_free(List* self)
 
 int List_size(List* self)
 {
+    if (self == NULL) {
+        assert(false && "self must not be null");
+        return 0;
+    }
+
     return self->size;
 }
 
 bool List_empty(List* self)
 {
+    if (self == NULL) {
+        assert(false && "self must not be null");
+        return false;
+    }
+
     return self->size == 0;
 }
 
 Element* List_first(List* self)
 {
+    if (self == NULL) {
+        assert(false && "self must not be null");
+        return NULL;
+    }
+
     return self->first;
 }
 
 Element* List_last(List* self)
 {
+    if (self == NULL) {
+        assert(false && "self must not be null");
+        return NULL;
+    }
+
     return self->last;
 }
 
@@ -91,7 +116,14 @@ static void list_insertBefore(List* self, Element* elem, Element* at)
 
 Element* List_insertAfter(List* self, void* data, Element* at)
 {
-    assert(at);
+    if (self == NULL) {
+        assert(false && "self must not be null");
+        return NULL;
+    }
+    if (at == NULL) {
+        assert(false && "at must not be null");
+        return NULL;
+    }
 
     Element* elem = element_new(data);
     if (elem == NULL) {
@@ -104,7 +136,14 @@ Element* List_insertAfter(List* self, void* data, Element* at)
 
 Element* List_insertBefore(List* self, void* data, Element* at)
 {
-    assert(at);
+    if (self == NULL) {
+        assert(false && "self must not be null");
+        return NULL;
+    }
+    if (at == NULL) {
+        assert(false && "at must not be null");
+        return NULL;
+    }
 
     Element* elem = element_new(data);
     if (elem == NULL) {
@@ -138,6 +177,11 @@ static void list_pushBack(List* self, Element* elem)
 
 Element* List_pushFront(List* self, void* data)
 {
+    if (self == NULL) {
+        assert(false && "self must not be null");
+        return NULL;
+    }
+
     Element* elem = element_new(data);
     if (elem == NULL) {
         return NULL;
@@ -149,6 +193,11 @@ Element* List_pushFront(List* self, void* data)
 
 Element* List_pushBack(List* self, void* data)
 {
+    if (self == NULL) {
+        assert(false && "self must not be null");
+        return NULL;
+    }
+
     Element* elem = element_new(data);
     if (elem == NULL) {
         return NULL;
@@ -160,7 +209,14 @@ Element* List_pushBack(List* self, void* data)
 
 void* List_remove(List* self, Element* elem)
 {
-    assert(elem);
+    if (self == NULL) {
+        assert(false && "self must not be null");
+        return NULL;
+    }
+    if (elem == NULL) {
+        assert(false && "elem must not be null");
+        return NULL;
+    }
 
     if (elem->prev == NULL) {
         self->first = elem->next;
@@ -180,6 +236,11 @@ void* List_remove(List* self, Element* elem)
 
 void List_clear(List* self)
 {
+    if (self == NULL) {
+        assert(false && "self must not be null");
+        return;
+    }
+
     Element* next;
     for (Element* e = self->first; e; e = next) {
         next = e->next;

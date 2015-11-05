@@ -1,5 +1,6 @@
 #include "sclib/stack.h"
 
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "sclib/list.h"
@@ -24,22 +25,42 @@ Stack* Stack_new(int capacity)
 
 void Stack_free(Stack* self)
 {
+    if (self == NULL) {
+        assert(false && "self must not be null");
+        return;
+    }
+
     free(self->list);
     free(self);
 }
 
 int Stack_size(Stack* self)
 {
+    if (self == NULL) {
+        assert(false && "self must not be null");
+        return 0;
+    }
+
     return List_size(self->list);
 }
 
 bool Stack_empty(Stack* self)
 {
+    if (self == NULL) {
+        assert(false && "self must not be null");
+        return false;
+    }
+
     return List_size(self->list) == 0;
 }
 
 bool Stack_push(Stack* self, void* data)
 {
+    if (self == NULL) {
+        assert(false && "self must not be null");
+        return false;
+    }
+
     if (self->capacity != 0
             && List_size(self->list) >= self->capacity) {
         return false;
@@ -52,6 +73,11 @@ bool Stack_push(Stack* self, void* data)
 
 void* Stack_pop(Stack* self)
 {
+    if (self == NULL) {
+        assert(false && "self must not be null");
+        return NULL;
+    }
+
     if (Stack_empty(self)) {
         return NULL;
     }
@@ -60,6 +86,11 @@ void* Stack_pop(Stack* self)
 
 void* Stack_top(Stack* self)
 {
+    if (self == NULL) {
+        assert(false && "self must not be null");
+        return NULL;
+    }
+
     if (Stack_empty(self)) {
         return NULL;
     } else {

@@ -32,25 +32,45 @@ Array* Array_new(int capacity)
 
 void Array_free(Array* self)
 {
+    if (self == NULL) {
+        assert(false && "self must not be null");
+        return;
+    }
+
     free(self->table);
     free(self);
 }
 
 int Array_size(Array* self)
 {
+    if (self == NULL) {
+        assert(false && "self must not be null");
+        return 0;
+    }
+
     return self->size;
 }
 
 bool Array_empty(Array* self)
 {
+    if (self == NULL) {
+        assert(false && "self must not be null");
+        return false;
+    }
+
     return self->size == 0;
 }
 
 void* Array_get(Array* self, int index)
 {
+    if (self == NULL) {
+        assert(false && "self must not be null");
+        return NULL;
+    }
     if (index < 0 || index >= self->size) {
         return NULL;
     }
+
     return self->table[index];
 }
 
@@ -68,6 +88,11 @@ static bool array_resize(Array* self)
 
 bool Array_append(Array* self, void* data)
 {
+    if (self == NULL) {
+        assert(false && "self must not be null");
+        return false;
+    }
+
     if (self->size >= self->capacity) {
         if (!array_resize(self)) {
             return false;
@@ -80,9 +105,14 @@ bool Array_append(Array* self, void* data)
 
 void* Array_remove(Array* self, int index)
 {
+    if (self == NULL) {
+        assert(false && "self must not be null");
+        return NULL;
+    }
     if (index < 0 || index >= self->size) {
         return NULL;
     }
+
     self->size--;
     void* data = self->table[index];
     for (int i = index; i < self->size; i++) {
@@ -94,6 +124,11 @@ void* Array_remove(Array* self, int index)
 
 void Array_clear(Array* self)
 {
+    if (self == NULL) {
+        assert(false && "self must not be null");
+        return;
+    }
+
     for (int i = 0; i < self->size; i++) {
         self->table[i] = NULL;
     }
