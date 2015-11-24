@@ -1,15 +1,15 @@
 #include "sclib/list.h"
-#include "minunit.h"
 #include <stdio.h>
+#include "nanounit.h"
 
 #define LEN(array) (sizeof(array)/sizeof(array[0]))
 
 static int test_new()
 {
     List* list = List_new();
-    assertEqual_ptr(NULL, List_first(list));
-    assertEqual_ptr(NULL, List_last(list));
-    assertEqual_int(0, List_size(list));
+    nu_assert_eq_ptr(NULL, List_first(list));
+    nu_assert_eq_ptr(NULL, List_last(list));
+    nu_assert_eq_int(0, List_size(list));
     return 0;
 }
 
@@ -30,13 +30,13 @@ static int test_free()
 static int test_size()
 {
     List* list = List_new();
-    assertEqual_int(0, List_size(list));
+    nu_assert_eq_int(0, List_size(list));
 
     List_pushBack(list, "first");
     List_pushBack(list, "second");
     List_pushFront(list, "zero");
     List_pushBack(list, "third");
-    assertEqual_int(4, List_size(list));
+    nu_assert_eq_int(4, List_size(list));
     List_free(list);
     return 0;
 }
@@ -44,10 +44,10 @@ static int test_size()
 static int test_empty()
 {
     List* list = List_new();
-    assertTrue(List_empty(list));
+    nu_assert(List_empty(list));
 
     List_pushBack(list, "first");
-    assertTrue(!List_empty(list));
+    nu_assert(!List_empty(list));
     List_free(list);
     return 0;
 }
@@ -56,7 +56,7 @@ static int test_iterator()
 {
     List* list = List_new();
     for (Element* e = List_first(list); e; e = e->next) {
-        fail();
+        nu_fail();
     }
     List_free(list);
     return 0;
@@ -71,7 +71,7 @@ static int test_pushBack()
     }
     int i = 0;
     for (Element* e = List_first(list); e; e = e->next) {
-        assertEqual_str(strs[i], (char*) e->data);
+        nu_assert_eq_str(strs[i], (char*) e->data);
         i++;
     }
     List_free(list);
@@ -87,9 +87,9 @@ static int test_remove()
     List_pushBack(list, "third");
     char* data;
     data = List_remove(list, List_first(list));
-    assertEqual_str("zero", data);
+    nu_assert_eq_str("zero", data);
     data = List_remove(list, List_last(list));
-    assertEqual_str("third", data);
+    nu_assert_eq_str("third", data);
     List_free(list);
     return 0;
 }
@@ -102,28 +102,23 @@ static int test_clear()
     List_pushFront(list, "zero");
     List_pushBack(list, "third");
     List_clear(list);
-    assertEqual_ptr(List_first(list), NULL);
-    assertEqual_ptr(List_last(list), NULL);
-    assertEqual_int(List_size(list), 0);
+    nu_assert_eq_ptr(List_first(list), NULL);
+    nu_assert_eq_ptr(List_last(list), NULL);
+    nu_assert_eq_int(List_size(list), 0);
     List_free(list);
     return 0;
 }
 
-static void runAllTests()
-{
-    runTest(test_new);
-    runTest(test_free);
-    runTest(test_size);
-    runTest(test_empty);
-    runTest(test_iterator);
-    runTest(test_pushBack);
-    runTest(test_remove);
-    runTest(test_clear);
-}
-
 int main()
 {
-    runAllTests();
-    reportTestResult();
+    nu_run_test(test_new);
+    nu_run_test(test_free);
+    nu_run_test(test_size);
+    nu_run_test(test_empty);
+    nu_run_test(test_iterator);
+    nu_run_test(test_pushBack);
+    nu_run_test(test_remove);
+    nu_run_test(test_clear);
+    nu_report();
     return 0;
 }

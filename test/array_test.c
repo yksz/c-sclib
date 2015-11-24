@@ -1,16 +1,16 @@
 #include "sclib/array.h"
-#include "minunit.h"
 #include <stdio.h>
+#include "nanounit.h"
 
 static int test_size()
 {
     Array* array = Array_new(0);
-    assertEqual_int(0, Array_size(array));
+    nu_assert_eq_int(0, Array_size(array));
 
     Array_append(array, "first");
-    assertEqual_int(1, Array_size(array));
+    nu_assert_eq_int(1, Array_size(array));
     Array_remove(array, 0);
-    assertEqual_int(0, Array_size(array));
+    nu_assert_eq_int(0, Array_size(array));
     Array_free(array);
     return 0;
 }
@@ -18,10 +18,10 @@ static int test_size()
 static int test_empty()
 {
     Array* array = Array_new(0);
-    assertTrue(Array_empty(array));
+    nu_assert(Array_empty(array));
 
     Array_append(array, "first");
-    assertTrue(!Array_empty(array));
+    nu_assert(!Array_empty(array));
     Array_free(array);
     return 0;
 }
@@ -29,16 +29,16 @@ static int test_empty()
 static int test_get()
 {
     Array* array = Array_new(0);
-    assertEqual_ptr(NULL, Array_get(array, 0));
-    assertEqual_ptr(NULL, Array_get(array, 1));
-    assertEqual_ptr(NULL, Array_get(array, -1));
+    nu_assert_eq_ptr(NULL, Array_get(array, 0));
+    nu_assert_eq_ptr(NULL, Array_get(array, 1));
+    nu_assert_eq_ptr(NULL, Array_get(array, -1));
 
     Array_append(array, "first");
     Array_append(array, "second");
     Array_append(array, "third");
-    assertEqual_str("first", (char*) Array_get(array, 0));
-    assertEqual_str("second", (char*) Array_get(array, 1));
-    assertEqual_str("third", (char*) Array_get(array, 2));
+    nu_assert_eq_str("first", (char*) Array_get(array, 0));
+    nu_assert_eq_str("second", (char*) Array_get(array, 1));
+    nu_assert_eq_str("third", (char*) Array_get(array, 2));
     Array_free(array);
     return 0;
 }
@@ -48,20 +48,20 @@ static int test_append()
     Array* array = Array_new(2);
 
     Array_append(array, "first");
-    assertEqual_int(1, Array_size(array));
-    assertEqual_str("first", (char*) Array_get(array, 0));
+    nu_assert_eq_int(1, Array_size(array));
+    nu_assert_eq_str("first", (char*) Array_get(array, 0));
 
     Array_append(array, "second");
-    assertEqual_int(2, Array_size(array));
-    assertEqual_str("second", (char*) Array_get(array, 1));
+    nu_assert_eq_int(2, Array_size(array));
+    nu_assert_eq_str("second", (char*) Array_get(array, 1));
 
     Array_append(array, "third");
-    assertEqual_int(3, Array_size(array));
-    assertEqual_str("first", (char*) Array_get(array, 0));
-    assertEqual_str("second", (char*) Array_get(array, 1));
-    assertEqual_str("third", (char*) Array_get(array, 2));
-    assertEqual_ptr(NULL, Array_get(array, 3));
-    assertEqual_ptr(NULL, Array_get(array, 4));
+    nu_assert_eq_int(3, Array_size(array));
+    nu_assert_eq_str("first", (char*) Array_get(array, 0));
+    nu_assert_eq_str("second", (char*) Array_get(array, 1));
+    nu_assert_eq_str("third", (char*) Array_get(array, 2));
+    nu_assert_eq_ptr(NULL, Array_get(array, 3));
+    nu_assert_eq_ptr(NULL, Array_get(array, 4));
 
     Array_free(array);
     return 0;
@@ -70,20 +70,20 @@ static int test_append()
 static int test_remove()
 {
     Array* array = Array_new(2);
-    assertTrue(!Array_remove(array, 0));
-    assertTrue(!Array_remove(array, 1));
-    assertTrue(!Array_remove(array, -1));
+    nu_assert(!Array_remove(array, 0));
+    nu_assert(!Array_remove(array, 1));
+    nu_assert(!Array_remove(array, -1));
 
     Array_append(array, "first");
     Array_append(array, "second");
     Array_append(array, "third");
-    assertEqual_str("first", (char*) Array_remove(array, 0));
-    assertEqual_int(2, Array_size(array));
-    assertEqual_str("second", (char*) Array_remove(array, 0));
-    assertEqual_int(1, Array_size(array));
-    assertEqual_str("third", (char*) Array_remove(array, 0));
-    assertEqual_int(0, Array_size(array));
-    assertEqual_ptr(NULL, Array_remove(array, 0));
+    nu_assert_eq_str("first", (char*) Array_remove(array, 0));
+    nu_assert_eq_int(2, Array_size(array));
+    nu_assert_eq_str("second", (char*) Array_remove(array, 0));
+    nu_assert_eq_int(1, Array_size(array));
+    nu_assert_eq_str("third", (char*) Array_remove(array, 0));
+    nu_assert_eq_int(0, Array_size(array));
+    nu_assert_eq_ptr(NULL, Array_remove(array, 0));
     Array_free(array);
     return 0;
 }
@@ -96,25 +96,20 @@ static int test_clear()
     Array_append(array, "third");
     Array_clear(array);
     for (int i = 0; i < Array_size(array); i++) {
-        fail();
+        nu_fail();
     }
     Array_free(array);
     return 0;
 }
 
-static void runAllTests()
-{
-    runTest(test_size);
-    runTest(test_empty);
-    runTest(test_get);
-    runTest(test_append);
-    runTest(test_remove);
-    runTest(test_clear);
-}
-
 int main()
 {
-    runAllTests();
-    reportTestResult();
+    nu_run_test(test_size);
+    nu_run_test(test_empty);
+    nu_run_test(test_get);
+    nu_run_test(test_append);
+    nu_run_test(test_remove);
+    nu_run_test(test_clear);
+    nu_report();
     return 0;
 }

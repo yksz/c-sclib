@@ -1,18 +1,18 @@
 #include "sclib/hashmap.h"
-#include "minunit.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "nanounit.h"
 
 static int test_size()
 {
     HashMap* hashmap = HashMap_new_str();
-    assertEqual_int(0, HashMap_size(hashmap));
+    nu_assert_eq_int(0, HashMap_size(hashmap));
 
     HashMap_add(hashmap, "a", "1");
-    assertEqual_int(1, HashMap_size(hashmap));
+    nu_assert_eq_int(1, HashMap_size(hashmap));
     HashMap_remove(hashmap, "a");
-    assertEqual_int(0, HashMap_size(hashmap));
+    nu_assert_eq_int(0, HashMap_size(hashmap));
     HashMap_free(hashmap);
     return 0;
 }
@@ -20,10 +20,10 @@ static int test_size()
 static int test_empty()
 {
     HashMap* hashmap = HashMap_new_str();
-    assertTrue(HashMap_empty(hashmap));
+    nu_assert(HashMap_empty(hashmap));
 
     HashMap_add(hashmap, "a", "1");
-    assertTrue(!HashMap_empty(hashmap));
+    nu_assert(!HashMap_empty(hashmap));
     HashMap_free(hashmap);
     return 0;
 }
@@ -31,14 +31,14 @@ static int test_empty()
 static int test_get()
 {
     HashMap* hashmap = HashMap_new_str();
-    assertEqual_ptr(NULL, HashMap_get(hashmap, "a"));
+    nu_assert_eq_ptr(NULL, HashMap_get(hashmap, "a"));
 
     HashMap_add(hashmap, "a", "1");
     HashMap_add(hashmap, "b", "2");
     HashMap_add(hashmap, "c", "3");
-    assertEqual_str("1", (char*) HashMap_get(hashmap, "a"));
-    assertEqual_str("2", (char*) HashMap_get(hashmap, "b"));
-    assertEqual_str("3", (char*) HashMap_get(hashmap, "c"));
+    nu_assert_eq_str("1", (char*) HashMap_get(hashmap, "a"));
+    nu_assert_eq_str("2", (char*) HashMap_get(hashmap, "b"));
+    nu_assert_eq_str("3", (char*) HashMap_get(hashmap, "c"));
     HashMap_free(hashmap);
     return 0;
 }
@@ -46,19 +46,19 @@ static int test_get()
 static int test_insert()
 {
     HashMap* hashmap = HashMap_new_str();
-    assertEqual_ptr(NULL, HashMap_get(hashmap, "a"));
+    nu_assert_eq_ptr(NULL, HashMap_get(hashmap, "a"));
 
     HashMap_add(hashmap, "a", "1");
-    assertEqual_int(1, HashMap_size(hashmap));
-    assertEqual_str("1", (char*) HashMap_get(hashmap, "a"));
+    nu_assert_eq_int(1, HashMap_size(hashmap));
+    nu_assert_eq_str("1", (char*) HashMap_get(hashmap, "a"));
 
     HashMap_add(hashmap, "b", "2");
-    assertEqual_int(2, HashMap_size(hashmap));
-    assertEqual_str("2", (char*) HashMap_get(hashmap, "b"));
+    nu_assert_eq_int(2, HashMap_size(hashmap));
+    nu_assert_eq_str("2", (char*) HashMap_get(hashmap, "b"));
 
     HashMap_add(hashmap, "a", "3");
-    assertEqual_int(2, HashMap_size(hashmap));
-    assertEqual_str("3", (char*) HashMap_get(hashmap, "a"));
+    nu_assert_eq_int(2, HashMap_size(hashmap));
+    nu_assert_eq_str("3", (char*) HashMap_get(hashmap, "a"));
     HashMap_free(hashmap);
     return 0;
 }
@@ -66,18 +66,18 @@ static int test_insert()
 static int test_delete()
 {
     HashMap* hashmap = HashMap_new_str();
-    assertEqual_ptr(NULL, HashMap_remove(hashmap, "a"));
+    nu_assert_eq_ptr(NULL, HashMap_remove(hashmap, "a"));
 
     HashMap_add(hashmap, "a", "1");
     HashMap_add(hashmap, "b", "2");
     HashMap_add(hashmap, "c", "3");
-    assertEqual_str("1", (char*) HashMap_remove(hashmap, "a"));
-    assertEqual_int(2, HashMap_size(hashmap));
-    assertEqual_str("2", (char*) HashMap_remove(hashmap, "b"));
-    assertEqual_int(1, HashMap_size(hashmap));
-    assertEqual_str("3", (char*) HashMap_remove(hashmap, "c"));
-    assertEqual_int(0, HashMap_size(hashmap));
-    assertEqual_ptr(NULL, (char*) HashMap_remove(hashmap, "a"));
+    nu_assert_eq_str("1", (char*) HashMap_remove(hashmap, "a"));
+    nu_assert_eq_int(2, HashMap_size(hashmap));
+    nu_assert_eq_str("2", (char*) HashMap_remove(hashmap, "b"));
+    nu_assert_eq_int(1, HashMap_size(hashmap));
+    nu_assert_eq_str("3", (char*) HashMap_remove(hashmap, "c"));
+    nu_assert_eq_int(0, HashMap_size(hashmap));
+    nu_assert_eq_ptr(NULL, (char*) HashMap_remove(hashmap, "a"));
     HashMap_free(hashmap);
     return 0;
 }
@@ -89,8 +89,8 @@ static int test_clear()
     HashMap_add(hashmap, "b", "2");
     HashMap_add(hashmap, "c", "3");
     HashMap_clear(hashmap);
-    assertEqual_int(0, HashMap_size(hashmap));
-    assertEqual_ptr(NULL, HashMap_remove(hashmap, "a"));
+    nu_assert_eq_int(0, HashMap_size(hashmap));
+    nu_assert_eq_ptr(NULL, HashMap_remove(hashmap, "a"));
     HashMap_free(hashmap);
     return 0;
 }
@@ -105,7 +105,7 @@ static int test_keys()
     int size = 0;
     for (int i = 0; keys[i] != NULL; i++)
         size++;
-    assertEqual_int(3, size);
+    nu_assert_eq_int(3, size);
     free(keys);
     HashMap_free(hashmap);
     return 0;
@@ -118,9 +118,9 @@ static int test_key_int()
     HashMap_add(hashmap, &array[0], "1");
     HashMap_add(hashmap, &array[1], "2");
     HashMap_add(hashmap, &array[2], "3");
-    assertEqual_str("1", (char*) HashMap_get(hashmap, &array[0]));
-    assertEqual_str("2", (char*) HashMap_get(hashmap, &array[1]));
-    assertEqual_str("3", (char*) HashMap_get(hashmap, &array[2]));
+    nu_assert_eq_str("1", (char*) HashMap_get(hashmap, &array[0]));
+    nu_assert_eq_str("2", (char*) HashMap_get(hashmap, &array[1]));
+    nu_assert_eq_str("3", (char*) HashMap_get(hashmap, &array[2]));
     HashMap_free(hashmap);
     return 0;
 }
@@ -159,22 +159,17 @@ static int test_load()
     return 0;
 }
 
-static void runAllTests()
-{
-    runTest(test_size);
-    runTest(test_empty);
-    runTest(test_get);
-    runTest(test_insert);
-    runTest(test_delete);
-    runTest(test_clear);
-    runTest(test_keys);
-    runTest(test_key_int);
-    runTest(test_load);
-}
-
 int main()
 {
-    runAllTests();
-    reportTestResult();
+    nu_run_test(test_size);
+    nu_run_test(test_empty);
+    nu_run_test(test_get);
+    nu_run_test(test_insert);
+    nu_run_test(test_delete);
+    nu_run_test(test_clear);
+    nu_run_test(test_keys);
+    nu_run_test(test_key_int);
+    nu_run_test(test_load);
+    nu_report();
     return 0;
 }
