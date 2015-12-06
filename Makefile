@@ -76,3 +76,11 @@ $(EXAMPLE_OBJ_DIR)/%_example.o: $(EXAMPLE_SRC_DIR)/%_example.c
 
 clean:
 	rm -rf $(DST_DIR)
+
+help:
+	@echo "The following are some of the valid targets for this Makefile:"
+	@echo "... all (the default if no target is provided)"
+	@echo "... clean"
+	@echo "... compile"
+	@echo "... test"
+	@echo "... test DEBUG=true (and 'gcov build/debug/src/array')"
