@@ -3,7 +3,7 @@
 
 #ifdef __cplusplus
 extern "C" {
-# endif /* __cplusplus */
+#endif /* __cplusplus */
 
 #include <stdio.h>
 #include <string.h>
@@ -65,6 +65,6 @@ static int failures = 0;
 
 #ifdef __cplusplus
 } /* extern "C" */
-# endif /* __cplusplus */
+#endif /* __cplusplus */
 
 #endif /* NANOUNIT_H */
